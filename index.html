@@ -16,6 +16,7 @@
       --text: #d0d4e8;
       --muted: #6b7094;
       --bright: #ffffff;
+      --nav-height: 52px;
     }
 
     body {
@@ -27,17 +28,27 @@
       min-height: 100vh;
     }
 
-    /* --- TAB NAV --- */
+    /* =====================
+       NAV — DESKTOP
+    ===================== */
     .nav {
       display: flex;
-      flex-wrap: wrap;
-      gap: 2px;
+      align-items: stretch;
       background: #080a10;
-      padding: 8px 8px 0;
       border-bottom: 2px solid var(--border);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 100;
+      min-height: var(--nav-height);
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 2px;
+      padding: 8px 8px 0;
+      flex: 1;
+      overflow: hidden;
     }
 
     .nav-btn {
@@ -46,7 +57,7 @@
       font-size: 13px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 8px 16px;
+      padding: 8px 14px;
       background: transparent;
       color: var(--muted);
       border: none;
@@ -55,6 +66,7 @@
       transition: color 0.2s, background 0.2s;
       position: relative;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .nav-btn:hover { color: var(--text); background: var(--border); }
@@ -74,17 +86,102 @@
       background: var(--surface);
     }
 
-    /* --- PAGES --- */
+    /* =====================
+       HAMBURGER BUTTON
+    ===================== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      padding: 0 16px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      min-height: var(--nav-height);
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s, width 0.3s;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Active tab label shown on mobile */
+    .nav-current-label {
+      display: none;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--bright);
+      padding: 0 12px;
+      align-items: center;
+      flex: 1;
+    }
+
+    /* =====================
+       MOBILE DROPDOWN MENU
+    ===================== */
+    .nav-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(var(--nav-height) + 2px);
+      left: 0;
+      right: 0;
+      background: #080a10;
+      border-bottom: 2px solid var(--border);
+      z-index: 99;
+      flex-direction: column;
+      padding: 6px;
+      gap: 2px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .nav-dropdown.open { display: flex; }
+
+    .nav-dropdown .nav-btn {
+      border-radius: 6px;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 14px;
+      border-top: none;
+    }
+
+    .nav-dropdown .nav-btn.active {
+      border-top: none;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      background: var(--surface);
+      color: var(--bright);
+    }
+
+    .nav-dropdown .nav-btn.active::after { display: none; }
+
+    /* =====================
+       PAGES
+    ===================== */
     .page { display: none; padding: 24px 20px; animation: fadeIn 0.25s ease; }
     .page.active { display: block; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-    /* --- HERO (Overview page) --- */
+    /* =====================
+       HERO
+    ===================== */
     .hero {
       text-align: center;
       padding: 28px 0 20px;
-      position: relative;
     }
 
     .hero-badge {
@@ -104,7 +201,6 @@
       font-family: 'Rajdhani', sans-serif;
       font-size: 32px;
       font-weight: 700;
-      color: var(--bright);
       line-height: 1.1;
       margin-bottom: 12px;
       background: linear-gradient(135deg, #fff 30%, #a78bfa);
@@ -137,7 +233,9 @@
     .tag.purple { background: #1a1040; color: #a78bfa; }
     .tag.red { background: #2a0e1a; color: #fc5c7c; }
 
-    /* --- COMPONENT CARDS --- */
+    /* =====================
+       CARDS
+    ===================== */
     .card-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
     .card {
@@ -176,7 +274,9 @@
 
     .card p { color: var(--muted); font-size: 13px; }
 
-    /* --- SECTION HEADERS --- */
+    /* =====================
+       SECTION HEADERS
+    ===================== */
     .section-header {
       display: flex;
       align-items: center;
@@ -190,15 +290,14 @@
       font-weight: 700;
       color: var(--bright);
       letter-spacing: 0.06em;
+      white-space: nowrap;
     }
 
-    .section-header .line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
+    .section-header .line { flex: 1; height: 1px; background: var(--border); }
 
-    /* --- FEATURE LIST --- */
+    /* =====================
+       FEATURE LIST
+    ===================== */
     .feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 
     .feature-list li {
@@ -212,30 +311,36 @@
       font-size: 13px;
     }
 
-    .feature-list li .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .feature-list li .icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
     .feature-list li strong { color: var(--bright); display: block; margin-bottom: 2px; font-size: 13px; }
     .feature-list li span { color: var(--muted); }
 
-    /* --- EVENT TABLE --- */
+    /* =====================
+       EVENT GRID
+    ===================== */
     .event-grid { display: flex; flex-direction: column; gap: 6px; }
 
     .event-row {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
       padding: 10px 14px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 13px;
+      flex-wrap: wrap;
     }
 
     .event-icon { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
-    .event-name { color: var(--bright); font-weight: 500; min-width: 120px; }
-    .event-desc { color: var(--muted); }
+    .event-name { color: var(--bright); font-weight: 500; min-width: 130px; flex-shrink: 0; }
+    .event-desc { color: var(--muted); flex: 1; min-width: 140px; }
 
-    /* --- REQUIREMENTS --- */
+    /* =====================
+       REQUIREMENTS TABLE
+    ===================== */
     .req-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
     .req-table th {
       font-family: 'Rajdhani', sans-serif;
       letter-spacing: 0.08em;
@@ -246,16 +351,20 @@
       text-align: left;
       border-bottom: 1px solid var(--border);
     }
+
     .req-table td {
       padding: 10px 12px;
       border-bottom: 1px solid var(--border);
       color: var(--text);
       vertical-align: top;
     }
-    .req-table tr:last-child td { border-bottom: none; }
-    .req-table td:first-child { color: var(--bright); font-weight: 500; width: 45%; }
 
-    /* --- CALLOUT --- */
+    .req-table tr:last-child td { border-bottom: none; }
+    .req-table td:first-child { color: var(--bright); font-weight: 500; width: 40%; }
+
+    /* =====================
+       CALLOUT
+    ===================== */
     .callout {
       background: #1a1040;
       border: 1px solid #3d2d80;
@@ -275,7 +384,9 @@
     .callout strong { color: var(--bright); display: block; margin-bottom: 4px; }
     .callout p { color: var(--muted); margin: 0; }
 
-    /* --- FOOTER NOTE --- */
+    /* =====================
+       FOOTER
+    ===================== */
     .footer-note {
       text-align: center;
       margin-top: 28px;
@@ -287,25 +398,79 @@
 
     .footer-note a { color: var(--accent); text-decoration: none; }
 
-    /* --- SCROLLBAR --- */
+    /* =====================
+       SCROLLBAR
+    ===================== */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* =====================
+       RESPONSIVE BREAKPOINTS
+    ===================== */
+
+    /* Tighten tabs on medium screens */
+    @media (max-width: 760px) {
+      .nav-btn { padding: 8px 10px; font-size: 12px; letter-spacing: 0.05em; }
+    }
+
+    /* Switch to hamburger on mobile */
+    @media (max-width: 580px) {
+      .nav-tabs { display: none; }
+      .hamburger { display: flex; }
+      .nav-current-label { display: flex; }
+
+      .hero h1 { font-size: 26px; }
+      .hero p { font-size: 13px; }
+      .page { padding: 16px 12px; }
+
+      .req-table td:first-child { width: 35%; }
+
+      /* Stack event rows on very small screens */
+      .event-name { min-width: unset; }
+    }
+
+    @media (max-width: 380px) {
+      .hero h1 { font-size: 22px; }
+      .req-table { font-size: 12px; }
+      .req-table td, .req-table th { padding: 8px; }
+      .feature-list li { padding: 10px; }
+      .callout { padding: 12px; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- NAV BAR -->
   <nav class="nav">
-    <button class="nav-btn active" onclick="show('overview', this)">🎙️ Overview</button>
-    <button class="nav-btn" onclick="show('components', this)">🧠 Components</button>
-    <button class="nav-btn" onclick="show('voice', this)">🎤 Voice & AI</button>
-    <button class="nav-btn" onclick="show('twitch', this)">💬 Twitch</button>
-    <button class="nav-btn" onclick="show('personality', this)">🧬 Personality</button>
-    <button class="nav-btn" onclick="show('requirements', this)">⚙️ Requirements</button>
-    <button class="nav-btn" onclick="show('notes', this)">⚠️ Notes</button>
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-btn active" data-page="overview">🎙️ Overview</button>
+      <button class="nav-btn" data-page="components">🧠 Components</button>
+      <button class="nav-btn" data-page="voice">🎤 Voice & AI</button>
+      <button class="nav-btn" data-page="twitch">💬 Twitch</button>
+      <button class="nav-btn" data-page="personality">🧬 Personality</button>
+      <button class="nav-btn" data-page="requirements">⚙️ Requirements</button>
+      <button class="nav-btn" data-page="notes">⚠️ Notes</button>
+    </div>
+
+    <span class="nav-current-label" id="currentLabel">🎙️ Overview</span>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
-  <!-- OVERVIEW -->
+  <!-- MOBILE DROPDOWN -->
+  <div class="nav-dropdown" id="navDropdown">
+    <button class="nav-btn active" data-page="overview">🎙️ Overview</button>
+    <button class="nav-btn" data-page="components">🧠 Components</button>
+    <button class="nav-btn" data-page="voice">🎤 Voice & AI</button>
+    <button class="nav-btn" data-page="twitch">💬 Twitch</button>
+    <button class="nav-btn" data-page="personality">🧬 Personality</button>
+    <button class="nav-btn" data-page="requirements">⚙️ Requirements</button>
+    <button class="nav-btn" data-page="notes">⚠️ Notes</button>
+  </div>
+
+  <!-- ==================== OVERVIEW ==================== -->
   <div id="overview" class="page active">
     <div class="hero">
       <div class="hero-badge">AI Stream Companion System</div>
@@ -337,7 +502,7 @@
     <div class="footer-note">Questions before buying? Find me live at <a href="https://twitch.tv/Kylealamode" target="_blank">twitch.tv/Kylealamode</a></div>
   </div>
 
-  <!-- COMPONENTS -->
+  <!-- ==================== COMPONENTS ==================== -->
   <div id="components" class="page">
     <div class="section-header"><h2>The Three-Component Suite</h2><div class="line"></div></div>
     <p style="color:var(--muted); margin-bottom: 18px; font-size: 13px;">Three executables that work together as a complete, seamless system.</p>
@@ -358,14 +523,13 @@
         <p>Connects to your channel via Twitch's EventSub WebSocket API. Feeds subscriptions, raids, bits, chat commands, redeems, and more directly to your AI — no polling, no delays, all in real time.</p>
       </div>
     </div>
-
     <div class="callout" style="margin-top: 18px;">
       <strong>💡 Recommended: Two-PC Setup</strong>
       <p>Run the AI Server on a dedicated second PC to avoid GPU contention with your game and OBS. The Client communicates over your local network — just point it at your second PC's IP address. Even a mid-range GPU (8GB+ VRAM) handles it well when not competing with a game encoder.</p>
     </div>
   </div>
 
-  <!-- VOICE & AI -->
+  <!-- ==================== VOICE & AI ==================== -->
   <div id="voice" class="page">
     <div class="section-header"><h2>Voice & Speech</h2><div class="line"></div></div>
     <ul class="feature-list" style="margin-bottom: 24px;">
@@ -393,11 +557,10 @@
     </ul>
   </div>
 
-  <!-- TWITCH -->
+  <!-- ==================== TWITCH ==================== -->
   <div id="twitch" class="page">
     <div class="section-header"><h2>Twitch Integration</h2><div class="line"></div></div>
     <p style="color:var(--muted); font-size:13px; margin-bottom: 16px;">Every event below is individually toggleable. Each has a fully customizable message template with dynamic variables like <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:11px;">{username}</code>, <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:11px;">{viewers}</code>, <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:11px;">{bits}</code>, <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:11px;">{months}</code>, and more.</p>
-
     <div class="event-grid">
       <div class="event-row"><span class="event-icon">🎁</span><span class="event-name">Channel Point Redeems</span><span class="event-desc">Multiple custom redeems, each with its own configurable message template.</span></div>
       <div class="event-row"><span class="event-icon">⭐</span><span class="event-name">Subscriptions</span><span class="event-desc">Reacts to new subs and resubs, including month count recognition.</span></div>
@@ -411,7 +574,7 @@
     </div>
   </div>
 
-  <!-- PERSONALITY -->
+  <!-- ==================== PERSONALITY ==================== -->
   <div id="personality" class="page">
     <div class="section-header"><h2>Personality System</h2><div class="line"></div></div>
     <p style="color:var(--muted); font-size:13px; margin-bottom: 16px;">Build a full roster of distinct AI characters and switch between them on the fly.</p>
@@ -433,7 +596,7 @@
     </ul>
   </div>
 
-  <!-- REQUIREMENTS -->
+  <!-- ==================== REQUIREMENTS ==================== -->
   <div id="requirements" class="page">
     <div class="section-header"><h2>Requirements</h2><div class="line"></div></div>
     <div class="card" style="margin-bottom: 18px; padding: 0; overflow: hidden;">
@@ -442,10 +605,10 @@
         <tbody>
           <tr><td>Ollama</td><td>Installed and running with at least one model pulled. Browse free models at ollama.com/library.</td></tr>
           <tr><td>Whisper CLI</td><td>whisper-cli.exe with a model .bin file. Larger models (small, medium, large) offer better accuracy.</td></tr>
-          <tr><td>Piper TTS</td><td>piper.exe with a voice .onnx model. Hundreds of community voices available at rhasspy.github.io/piper-samples.</td></tr>
+          <tr><td>Piper TTS</td><td>piper.exe with a voice .onnx model. Hundreds of community voices at rhasspy.github.io/piper-samples.</td></tr>
           <tr><td>Operating System</td><td>Windows (primary platform). Mac/Linux may require additional configuration and is not officially supported.</td></tr>
-          <tr><td>GPU (Recommended)</td><td>8GB+ VRAM for running the AI Server. A dedicated second PC is strongly recommended for streamers.</td></tr>
-          <tr><td>Twitch Dev App</td><td>Free Client ID + Secret from dev.twitch.tv — required for the Twitch Listener component only (~5 min setup).</td></tr>
+          <tr><td>GPU (Recommended)</td><td>8GB+ VRAM for the AI Server. A dedicated second PC is strongly recommended for streamers.</td></tr>
+          <tr><td>Twitch Dev App</td><td>Free Client ID + Secret from dev.twitch.tv — required for the Twitch Listener only (~5 min setup).</td></tr>
         </tbody>
       </table>
     </div>
@@ -473,17 +636,16 @@
       <strong>📦 Included Out of the Box</strong>
       <p>One base Whisper speech recognition model and one base Piper TTS voice model are included — no additional downloads needed to get started immediately.</p>
     </div>
-
     <p style="color:var(--muted); font-size:12px; text-align:center; margin-top: 10px;">All three external tools (Ollama, Whisper, Piper) are free and open source. Links and setup guidance are included with the package.</p>
   </div>
 
-  <!-- NOTES -->
+  <!-- ==================== NOTES ==================== -->
   <div id="notes" class="page">
     <div class="section-header"><h2>Important Notes & Disclaimers</h2><div class="line"></div></div>
 
     <div class="callout warning" style="margin-bottom: 12px;">
       <strong>⚠️ AI Performance Depends on Your Hardware & Model</strong>
-      <p>Intelligence, response quality, and speed are entirely determined by the Ollama model you choose and your hardware — not the companion software. Larger models (13B, 70B) produce smarter responses but need more VRAM. Smaller models (3B–7B) are faster on modest hardware. Response latency is almost entirely a function of GPU/CPU speed and model size. Experimenting with different Ollama models is part of the fun — all models are free to swap at any time.</p>
+      <p>Intelligence, response quality, and speed are entirely determined by the Ollama model you choose and your hardware — not the companion software. Larger models (13B, 70B) produce smarter responses but need more VRAM. Smaller models (3B–7B) are faster on modest hardware. Response latency is almost entirely a function of GPU/CPU speed and model size. All Ollama models are free to swap at any time.</p>
     </div>
 
     <div class="callout warning" style="margin-bottom: 12px;">
@@ -507,12 +669,47 @@
   </div>
 
   <script>
-    function show(id, btn) {
+    function show(pageId, clickedBtn) {
+      // Hide all pages
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      btn.classList.add('active');
+      document.getElementById(pageId).classList.add('active');
+
+      // Sync all nav buttons in both bars
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.page === pageId);
+      });
+
+      // Update mobile label
+      document.getElementById('currentLabel').textContent = clickedBtn.textContent;
+
+      // Close dropdown if open
+      document.getElementById('navDropdown').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
     }
+
+    // Wire up all nav buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => show(btn.dataset.page, btn));
+    });
+
+    // Hamburger toggle
+    document.getElementById('hamburger').addEventListener('click', () => {
+      const dropdown = document.getElementById('navDropdown');
+      const burger = document.getElementById('hamburger');
+      const isOpen = dropdown.classList.contains('open');
+      dropdown.classList.toggle('open', !isOpen);
+      burger.classList.toggle('open', !isOpen);
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', e => {
+      const nav = document.querySelector('.nav');
+      const dropdown = document.getElementById('navDropdown');
+      if (!nav.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+        document.getElementById('hamburger').classList.remove('open');
+      }
+    });
   </script>
 
 </body>
