@@ -3,18 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Stream Companion Suite - Feature Breakdown</title>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0b0d14;
-      --surface: #111420;
-      --border: #1e2235;
+      /* Palette nudged toward the itch store's deep navy so the two pages read as one product */
+      --bg: #070b1a;
+      --bg2: #0a1024;
+      --surface: #10152c;
+      --surface2: #151b38;
+      --border: #232a4d;
+      --border-lit: #33407a;
       --accent: #7c5cfc;
       --accent2: #fc5c7c;
-      --text: #d0d4e8;
-      --muted: #6b7094;
+      --grad: linear-gradient(135deg, #7c5cfc 0%, #a06bfb 45%, #fc5c7c 100%);
+      --text: #d0d6ee;
+      --muted: #7982ad;
       --bright: #ffffff;
       --nav-height: 52px;
     }
@@ -26,6 +32,21 @@
       font-size: 14px;
       line-height: 1.7;
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient depth: fixed radial glows behind everything (cheap, no assets) */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(720px 460px at 50% -8%, rgba(124,92,252,0.20), transparent 70%),
+        radial-gradient(560px 380px at 88% 4%, rgba(252,92,124,0.12), transparent 68%),
+        radial-gradient(600px 500px at 6% 22%, rgba(90,120,255,0.08), transparent 70%);
     }
 
     /* =====================
@@ -34,8 +55,10 @@
     .nav {
       display: flex;
       align-items: stretch;
-      background: #080a10;
-      border-bottom: 2px solid var(--border);
+      background: rgba(6,9,20,0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -69,22 +92,52 @@
       flex-shrink: 0;
     }
 
-    .nav-btn:hover { color: var(--text); background: var(--border); }
+    .nav-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
 
     .nav-btn.active {
       color: var(--bright);
       background: var(--surface);
-      border-top: 2px solid var(--accent);
+    }
+
+    /* gradient underline on the active tab (the accent, carried through) */
+    .nav-btn.active::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 8px; right: 8px;
+      height: 2px;
+      background: var(--grad);
+      border-radius: 2px;
     }
 
     .nav-btn.active::after {
       content: '';
       position: absolute;
-      bottom: -2px;
+      bottom: -1px;
       left: 0; right: 0;
       height: 2px;
       background: var(--surface);
     }
+
+    /* Sticky "Buy on itch" button living in the nav, always in reach */
+    .nav-buy {
+      align-self: center;
+      margin: 0 12px 0 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding: 8px 16px;
+      border-radius: 6px;
+      background: var(--grad);
+      color: #fff;
+      text-decoration: none;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(124,92,252,0.35);
+      transition: transform 0.12s, box-shadow 0.2s, filter 0.2s;
+    }
+    .nav-buy:hover { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 6px 22px rgba(252,92,124,0.45); }
 
     /* =====================
        HAMBURGER BUTTON
@@ -116,7 +169,6 @@
     .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* Active tab label shown on mobile */
     .nav-current-label {
       display: none;
       font-family: 'Rajdhani', sans-serif;
@@ -136,11 +188,11 @@
     .nav-dropdown {
       display: none;
       position: absolute;
-      top: calc(var(--nav-height) + 2px);
+      top: calc(var(--nav-height) + 1px);
       left: 0;
       right: 0;
-      background: #080a10;
-      border-bottom: 2px solid var(--border);
+      background: #060a16;
+      border-bottom: 1px solid var(--border);
       z-index: 99;
       flex-direction: column;
       padding: 6px;
@@ -155,33 +207,60 @@
       padding: 12px 16px;
       text-align: left;
       font-size: 14px;
-      border-top: none;
     }
-
+    .nav-dropdown .nav-btn.active::before { display: none; }
     .nav-dropdown .nav-btn.active {
-      border-top: none;
-      border-left: 3px solid var(--accent);
+      border-left: 3px solid transparent;
+      border-image: var(--grad) 1;
       border-radius: 0 6px 6px 0;
       background: var(--surface);
       color: var(--bright);
     }
-
     .nav-dropdown .nav-btn.active::after { display: none; }
 
     /* =====================
        PAGES
     ===================== */
-    .page { display: none; padding: 24px 20px; animation: fadeIn 0.25s ease; }
+    .page { display: none; padding: 24px 20px 96px; max-width: 900px; margin: 0 auto; animation: fadeIn 0.3s ease; }
     .page.active { display: block; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
     /* =====================
        HERO
     ===================== */
     .hero {
       text-align: center;
-      padding: 28px 0 20px;
+      padding: 40px 0 26px;
+      position: relative;
+    }
+
+    /* CSS voice-pulse: gives the page a "face" without needing an image asset */
+    .voice-pulse {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 5px;
+      height: 34px;
+      margin-bottom: 18px;
+    }
+    .voice-pulse span {
+      display: block;
+      width: 5px;
+      border-radius: 3px;
+      background: var(--grad);
+      animation: eq 1.1s ease-in-out infinite;
+      opacity: 0.9;
+    }
+    .voice-pulse span:nth-child(1) { height: 12px; animation-delay: 0s; }
+    .voice-pulse span:nth-child(2) { height: 26px; animation-delay: 0.18s; }
+    .voice-pulse span:nth-child(3) { height: 34px; animation-delay: 0.36s; }
+    .voice-pulse span:nth-child(4) { height: 22px; animation-delay: 0.12s; }
+    .voice-pulse span:nth-child(5) { height: 15px; animation-delay: 0.30s; }
+    @keyframes eq {
+      0%, 100% { transform: scaleY(0.35); }
+      50%      { transform: scaleY(1); }
     }
 
     .hero-badge {
@@ -190,32 +269,53 @@
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid var(--accent);
+      color: #c9bcff;
+      border: 1px solid transparent;
       border-radius: 20px;
-      padding: 3px 12px;
-      margin-bottom: 14px;
+      padding: 4px 14px;
+      margin-bottom: 16px;
+      background:
+        linear-gradient(var(--bg2), var(--bg2)) padding-box,
+        var(--grad) border-box;
     }
 
     .hero h1 {
       font-family: 'Rajdhani', sans-serif;
-      font-size: 32px;
+      font-size: 40px;
       font-weight: 700;
-      line-height: 1.1;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, #fff 30%, #a78bfa);
+      line-height: 1.05;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 25%, #b9a6ff 70%, #fca6bd);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .hero p { color: var(--muted); max-width: 500px; margin: 0 auto 24px; font-size: 14px; }
+    .hero p { color: var(--muted); max-width: 520px; margin: 0 auto 22px; font-size: 14px; }
+
+    .hero-cta {
+      display: inline-block;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      padding: 13px 30px;
+      border-radius: 8px;
+      background: var(--grad);
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 8px 28px rgba(124,92,252,0.42);
+      transition: transform 0.14s, box-shadow 0.25s, filter 0.2s;
+    }
+    .hero-cta:hover { transform: translateY(-2px); filter: brightness(1.08); box-shadow: 0 12px 34px rgba(252,92,124,0.5); }
 
     .tag-row {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       justify-content: center;
-      margin-bottom: 24px;
+      margin-bottom: 26px;
     }
 
     .tag {
@@ -224,14 +324,15 @@
       font-size: 12px;
       letter-spacing: 0.06em;
       padding: 4px 12px;
-      border-radius: 4px;
-      background: var(--border);
+      border-radius: 5px;
+      background: var(--surface2);
       color: var(--text);
+      border: 1px solid var(--border);
     }
 
-    .tag.green { background: #0e2a1a; color: #4ade80; }
-    .tag.purple { background: #1a1040; color: #a78bfa; }
-    .tag.red { background: #2a0e1a; color: #fc5c7c; }
+    .tag.green { background: #0e2a1a; color: #4ade80; border-color: #164a2c; }
+    .tag.purple { background: #191048; color: #b9a6ff; border-color: #2e2170; }
+    .tag.red { background: #2a0e1a; color: #fc7c96; border-color: #521c2e; }
 
     /* =====================
        CARDS
@@ -239,35 +340,40 @@
     .card-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
     .card {
-      background: var(--surface);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--bg2) 100%);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
+      border-radius: 12px;
+      padding: 20px;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.2s;
+      transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
     }
 
     .page:not(#requirements) .card:hover {
-		border-color: var(--accent);
-	}
+      border-color: var(--border-lit);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
 
     .card::before {
       content: '';
       position: absolute;
       top: 0; left: 0;
       width: 3px; height: 100%;
-      background: var(--accent);
+      background: var(--grad);
+      opacity: 0.9;
+      transition: width 0.22s, opacity 0.22s;
     }
+    .page:not(#requirements) .card:hover::before { width: 5px; opacity: 1; box-shadow: 0 0 16px rgba(124,92,252,0.6); }
 
-    .card.red::before { background: var(--accent2); }
-    .card.teal::before { background: #2dd4bf; }
+    .card.red::before { background: linear-gradient(180deg, #fc5c7c, #ff9a76); }
+    .card.teal::before { background: linear-gradient(180deg, #2dd4bf, #34b3f1); }
 
-    .card-icon { font-size: 24px; margin-bottom: 8px; }
+    .card-icon { font-size: 26px; margin-bottom: 8px; }
 
     .card h3 {
       font-family: 'Rajdhani', sans-serif;
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--bright);
       letter-spacing: 0.04em;
@@ -282,20 +388,26 @@
     .section-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 16px;
     }
 
     .section-header h2 {
       font-family: 'Rajdhani', sans-serif;
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 700;
       color: var(--bright);
       letter-spacing: 0.06em;
       white-space: nowrap;
     }
 
-    .section-header .line { flex: 1; height: 1px; background: var(--border); }
+    .section-header .line {
+      flex: 1;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0.5;
+    }
 
     /* =====================
        FEATURE LIST
@@ -304,16 +416,33 @@
 
     .feature-list li {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: flex-start;
-      padding: 12px 14px;
+      padding: 13px 15px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 9px;
       font-size: 13px;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    }
+    .feature-list li:hover {
+      border-color: var(--border-lit);
+      transform: translateX(3px);
+      background: var(--surface2);
     }
 
-    .feature-list li .icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+    /* staggered reveal, replays each time a tab becomes active */
+    .page.active .feature-list li { animation: rise 0.45s ease both; }
+    .page.active .feature-list li:nth-child(1) { animation-delay: 0.02s; }
+    .page.active .feature-list li:nth-child(2) { animation-delay: 0.06s; }
+    .page.active .feature-list li:nth-child(3) { animation-delay: 0.10s; }
+    .page.active .feature-list li:nth-child(4) { animation-delay: 0.14s; }
+    .page.active .feature-list li:nth-child(5) { animation-delay: 0.18s; }
+    .page.active .feature-list li:nth-child(6) { animation-delay: 0.22s; }
+    .page.active .feature-list li:nth-child(7) { animation-delay: 0.26s; }
+    .page.active .feature-list li:nth-child(8) { animation-delay: 0.30s; }
+
+    .feature-list li .icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
     .feature-list li strong { color: var(--bright); display: block; margin-bottom: 2px; font-size: 13px; }
     .feature-list li span { color: var(--muted); }
 
@@ -326,17 +455,19 @@
       display: flex;
       align-items: flex-start;
       gap: 12px;
-      padding: 10px 14px;
+      padding: 11px 15px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 9px;
       font-size: 13px;
       flex-wrap: wrap;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
     }
+    .event-row:hover { border-color: var(--border-lit); transform: translateX(3px); background: var(--surface2); }
 
     .event-icon { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
-    .event-name { color: var(--bright); font-weight: 500; min-width: 130px; flex-shrink: 0; }
-    .event-desc { color: var(--muted); flex: 1; min-width: 140px; }
+    .event-name { color: var(--bright); font-weight: 500; min-width: 150px; flex-shrink: 0; }
+    .event-desc { color: var(--muted); flex: 1; min-width: 150px; }
 
     /* =====================
        REQUIREMENTS TABLE
@@ -349,13 +480,13 @@
       text-transform: uppercase;
       font-size: 11px;
       color: var(--muted);
-      padding: 8px 12px;
+      padding: 10px 14px;
       text-align: left;
       border-bottom: 1px solid var(--border);
     }
 
     .req-table td {
-      padding: 10px 12px;
+      padding: 11px 14px;
       border-bottom: 1px solid var(--border);
       color: var(--text);
       vertical-align: top;
@@ -368,44 +499,73 @@
        CALLOUT
     ===================== */
     .callout {
-      background: #1a1040;
-      border: 1px solid #3d2d80;
+      background: linear-gradient(180deg, #171b3e, #12152c);
+      border: 1px solid #2e2170;
       border-left: 3px solid var(--accent);
-      border-radius: 8px;
-      padding: 14px 16px;
+      border-radius: 9px;
+      padding: 15px 17px;
       margin-bottom: 14px;
       font-size: 13px;
     }
 
     .callout.warning {
-      background: #1a1010;
-      border-color: #5a2020;
+      background: linear-gradient(180deg, #241426, #18101c);
+      border-color: #5a2040;
       border-left-color: var(--accent2);
     }
 
     .callout strong { color: var(--bright); display: block; margin-bottom: 4px; }
     .callout p { color: var(--muted); margin: 0; }
-	
-	.store-link {
-	  display: inline-block;
-	  margin: 20px auto 0;
-	  padding: 10px 18px;
-	  font-family: 'Rajdhani', sans-serif;
-	  font-weight: 700;
-	  letter-spacing: 0.08em;
-	  text-transform: uppercase;
-	  font-size: 12px;
-	  border-radius: 6px;
-	  background: var(--accent);
-	  color: #fff;
-	  text-decoration: none;
-	  transition: background 0.2s, transform 0.1s;
-	}
 
-	.store-link:hover {
-	  background: #6a4de0;
-	  transform: translateY(-2px);
-	}
+    .store-link {
+      display: inline-block;
+      margin: 20px auto 0;
+      padding: 12px 22px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      border-radius: 8px;
+      background: var(--grad);
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(124,92,252,0.35);
+      transition: transform 0.12s, filter 0.2s, box-shadow 0.2s;
+    }
+    .store-link:hover { transform: translateY(-2px); filter: brightness(1.08); box-shadow: 0 12px 30px rgba(252,92,124,0.45); }
+
+    /* =====================
+       FLOATING BUY BUTTON (always visible)
+    ===================== */
+    .buy-fab {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 13px 22px;
+      border-radius: 40px;
+      background: var(--grad);
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(124,92,252,0.45);
+      animation: fabpulse 2.6s ease-in-out infinite;
+      transition: transform 0.14s, filter 0.2s;
+    }
+    .buy-fab:hover { transform: translateY(-2px) scale(1.03); filter: brightness(1.08); animation-play-state: paused; }
+    .buy-fab .cart { font-size: 15px; }
+    @keyframes fabpulse {
+      0%, 100% { box-shadow: 0 10px 30px rgba(124,92,252,0.40); }
+      50%      { box-shadow: 0 10px 40px rgba(252,92,124,0.6); }
+    }
 
     /* =====================
        FOOTER
@@ -419,46 +579,54 @@
       font-size: 12px;
     }
 
-    .footer-note a { color: var(--accent); text-decoration: none; }
+    .footer-note a { color: #b9a6ff; text-decoration: none; }
+    .footer-note a:hover { text-decoration: underline; }
 
     /* =====================
        SCROLLBAR
     ===================== */
-    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--border-lit); border-radius: 4px; }
+
+    /* =====================
+       MOTION-SAFE
+    ===================== */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
 
     /* =====================
        RESPONSIVE BREAKPOINTS
     ===================== */
-
-    /* Tighten tabs on medium screens */
     @media (max-width: 760px) {
       .nav-btn { padding: 8px 10px; font-size: 12px; letter-spacing: 0.05em; }
+      .nav-buy { padding: 7px 12px; font-size: 11px; }
     }
 
-    /* Switch to hamburger on mobile */
     @media (max-width: 580px) {
       .nav-tabs { display: none; }
       .hamburger { display: flex; }
       .nav-current-label { display: flex; }
+      .nav-buy { margin: 0 6px; padding: 7px 12px; }
 
-      .hero h1 { font-size: 26px; }
+      .hero { padding: 28px 0 20px; }
+      .hero h1 { font-size: 30px; }
       .hero p { font-size: 13px; }
-      .page { padding: 16px 12px; }
+      .page { padding: 18px 14px 92px; }
 
       .req-table td:first-child { width: 35%; }
-
-      /* Stack event rows on very small screens */
       .event-name { min-width: unset; }
+
+      .buy-fab { right: 14px; bottom: 14px; padding: 12px 18px; font-size: 12px; }
     }
 
     @media (max-width: 380px) {
-      .hero h1 { font-size: 22px; }
+      .hero h1 { font-size: 25px; }
       .req-table { font-size: 12px; }
       .req-table td, .req-table th { padding: 8px; }
-      .feature-list li { padding: 10px; }
-      .callout { padding: 12px; }
+      .feature-list li { padding: 11px; }
+      .callout { padding: 13px; }
     }
   </style>
 </head>
@@ -469,12 +637,14 @@
     <div class="nav-tabs" id="navTabs">
       <button class="nav-btn active" data-page="overview">🎙️ Overview</button>
       <button class="nav-btn" data-page="components">🧠 Components</button>
-      <button class="nav-btn" data-page="voice">🎤 Voice & AI</button>
+      <button class="nav-btn" data-page="voice">🎤 Voice &amp; AI</button>
       <button class="nav-btn" data-page="twitch">💬 Twitch</button>
       <button class="nav-btn" data-page="personality">🧬 Personality</button>
       <button class="nav-btn" data-page="requirements">⚙️ Requirements</button>
       <button class="nav-btn" data-page="notes">⚠️ Notes</button>
     </div>
+
+    <a class="nav-buy" href="https://kylealamode.itch.io/ai-stream-companion-suite" target="_blank" rel="noopener">Buy on itch</a>
 
     <span class="nav-current-label" id="currentLabel">🎙️ Overview</span>
     <button class="hamburger" id="hamburger" aria-label="Open menu">
@@ -486,7 +656,7 @@
   <div class="nav-dropdown" id="navDropdown">
     <button class="nav-btn active" data-page="overview">🎙️ Overview</button>
     <button class="nav-btn" data-page="components">🧠 Components</button>
-    <button class="nav-btn" data-page="voice">🎤 Voice & AI</button>
+    <button class="nav-btn" data-page="voice">🎤 Voice &amp; AI</button>
     <button class="nav-btn" data-page="twitch">💬 Twitch</button>
     <button class="nav-btn" data-page="personality">🧬 Personality</button>
     <button class="nav-btn" data-page="requirements">⚙️ Requirements</button>
@@ -496,6 +666,7 @@
   <!-- ==================== OVERVIEW ==================== -->
   <div id="overview" class="page active">
     <div class="hero">
+      <div class="voice-pulse" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
       <div class="hero-badge">AI Stream Companion System</div>
       <h1>Your Stream.<br>Your AI.<br>Always Alive.</h1>
       <p>A fully local, free-to-run AI voice companion that talks with your chat, reacts to viewers in real time, thinks on its own between moments, and remembers the people who matter.</p>
@@ -509,6 +680,7 @@
         <span class="tag purple">Voice Cloning</span>
         <span class="tag red">Windows</span>
       </div>
+      <a class="hero-cta" href="https://kylealamode.itch.io/ai-stream-companion-suite" target="_blank" rel="noopener">Get it on itch.io</a>
     </div>
 
     <div class="section-header"><h2>Perfect For</h2><div class="line"></div></div>
@@ -760,6 +932,10 @@
      ← Back to Itch Store Page
   </a>
 </div>
+
+
+  <!-- Always-visible floating buy button -->
+  <a class="buy-fab" href="https://kylealamode.itch.io/ai-stream-companion-suite" target="_blank" rel="noopener"><span class="cart">🛒</span> Buy on itch</a>
 
 </body>
 </html>
