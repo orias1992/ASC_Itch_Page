@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Stream Companion Suite - Feature Breakdown</title>
+  <title>AI Stream Companion Suite - Features, Setup &amp; Help</title>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,6 +47,15 @@
         radial-gradient(720px 460px at 50% -8%, rgba(124,92,252,0.20), transparent 70%),
         radial-gradient(560px 380px at 88% 4%, rgba(252,92,124,0.12), transparent 68%),
         radial-gradient(600px 500px at 6% 22%, rgba(90,120,255,0.08), transparent 70%);
+    }
+
+    code {
+      background: var(--border);
+      color: #e6e1ff;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+      white-space: nowrap;
     }
 
     /* =====================
@@ -334,6 +343,24 @@
     .tag.purple { background: #191048; color: #b9a6ff; border-color: #2e2170; }
     .tag.red { background: #2a0e1a; color: #fc7c96; border-color: #521c2e; }
 
+    /* "New" pill on features that arrived in the latest updates */
+    .new {
+      display: inline-block;
+      font-style: normal;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #2dd4bf;
+      border: 1px solid #1d5c55;
+      background: #0b2a29;
+      border-radius: 4px;
+      padding: 0 6px;
+      margin-left: 6px;
+      vertical-align: 1px;
+    }
+
     /* =====================
        CARDS
     ===================== */
@@ -409,6 +436,8 @@
       opacity: 0.5;
     }
 
+    .lead { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+
     /* =====================
        FEATURE LIST
     ===================== */
@@ -445,6 +474,25 @@
     .feature-list li .icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
     .feature-list li strong { color: var(--bright); display: block; margin-bottom: 2px; font-size: 13px; }
     .feature-list li span { color: var(--muted); }
+
+    /* numbered setup steps reuse the feature-list rows */
+    .feature-list li .num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: var(--grad);
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .feature-list li ul { margin: 6px 0 0 18px; color: var(--muted); }
+    .feature-list li ul li { display: list-item; padding: 0; background: none; border: none; animation: none !important; transform: none !important; }
 
     /* =====================
        EVENT GRID
@@ -514,8 +562,15 @@
       border-left-color: var(--accent2);
     }
 
+    .callout.teal {
+      background: linear-gradient(180deg, #0f2430, #0d1a24);
+      border-color: #1d4d55;
+      border-left-color: #2dd4bf;
+    }
+
     .callout strong { color: var(--bright); display: block; margin-bottom: 4px; }
     .callout p { color: var(--muted); margin: 0; }
+    .callout ul { color: var(--muted); margin: 4px 0 0 18px; }
 
     .store-link {
       display: inline-block;
@@ -579,8 +634,8 @@
       font-size: 12px;
     }
 
-    .footer-note a { color: #b9a6ff; text-decoration: none; }
-    .footer-note a:hover { text-decoration: underline; }
+    .footer-note a, .callout a, .feature-list a { color: #b9a6ff; text-decoration: none; }
+    .footer-note a:hover, .callout a:hover, .feature-list a:hover { text-decoration: underline; }
 
     /* =====================
        SCROLLBAR
@@ -598,18 +653,21 @@
 
     /* =====================
        RESPONSIVE BREAKPOINTS
+       (8 tabs now, so the compact and hamburger steps kick in earlier)
     ===================== */
-    @media (max-width: 760px) {
+    @media (max-width: 1180px) {
       .nav-btn { padding: 8px 10px; font-size: 12px; letter-spacing: 0.05em; }
       .nav-buy { padding: 7px 12px; font-size: 11px; }
     }
 
-    @media (max-width: 580px) {
+    @media (max-width: 940px) {
       .nav-tabs { display: none; }
       .hamburger { display: flex; }
       .nav-current-label { display: flex; }
       .nav-buy { margin: 0 6px; padding: 7px 12px; }
+    }
 
+    @media (max-width: 580px) {
       .hero { padding: 28px 0 20px; }
       .hero h1 { font-size: 30px; }
       .hero p { font-size: 13px; }
@@ -641,7 +699,8 @@
       <button class="nav-btn" data-page="twitch">💬 Twitch</button>
       <button class="nav-btn" data-page="personality">🧬 Personality</button>
       <button class="nav-btn" data-page="requirements">⚙️ Requirements</button>
-      <button class="nav-btn" data-page="notes">⚠️ Notes</button>
+      <button class="nav-btn" data-page="setup">🚀 Setup</button>
+      <button class="nav-btn" data-page="help">🛟 Help</button>
     </div>
 
     <a class="nav-buy" href="https://kylealamode.itch.io/ai-stream-companion-suite" target="_blank" rel="noopener">Buy on itch</a>
@@ -660,7 +719,8 @@
     <button class="nav-btn" data-page="twitch">💬 Twitch</button>
     <button class="nav-btn" data-page="personality">🧬 Personality</button>
     <button class="nav-btn" data-page="requirements">⚙️ Requirements</button>
-    <button class="nav-btn" data-page="notes">⚠️ Notes</button>
+    <button class="nav-btn" data-page="setup">🚀 Setup</button>
+    <button class="nav-btn" data-page="help">🛟 Help</button>
   </div>
 
   <!-- ==================== OVERVIEW ==================== -->
@@ -669,18 +729,30 @@
       <div class="voice-pulse" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
       <div class="hero-badge">AI Stream Companion System</div>
       <h1>Your Stream.<br>Your AI.<br>Always Alive.</h1>
-      <p>A fully local, free-to-run AI voice companion that talks with your chat, reacts to viewers in real time, thinks on its own between moments, and remembers the people who matter.</p>
+      <p>A fully local, free-to-run AI voice companion that talks with you and your chat, hears the room and knows when you're talking to it, thinks on its own between moments, and remembers the people who matter.</p>
       <div class="tag-row">
         <span class="tag green">✓ No Subscriptions</span>
         <span class="tag green">✓ No Cloud Fees</span>
-        <span class="tag green">✓ 100% Local</span>
+        <span class="tag green">✓ Local AI</span>
         <span class="tag purple">Ollama Powered</span>
         <span class="tag purple">Whisper STT</span>
         <span class="tag purple">Piper + Chatterbox TTS</span>
         <span class="tag purple">Voice Cloning</span>
+        <span class="tag purple">Room Listening</span>
         <span class="tag red">Windows</span>
       </div>
       <a class="hero-cta" href="https://kylealamode.itch.io/ai-stream-companion-suite" target="_blank" rel="noopener">Get it on itch.io</a>
+    </div>
+
+    <div class="callout teal">
+      <strong>🆕 What's new</strong>
+      <ul>
+        <li>Reply length dial: short, normal, long or extended.</li>
+        <li>Talk to it by name over room listening and the length dial applies there too.</li>
+        <li>No more spoken *actions*, with a switch if your character needs them.</li>
+        <li>Background notes call you by name instead of "he" or "she".</li>
+        <li>A clear log warning when something else keeps pushing your model out of memory.</li>
+      </ul>
     </div>
 
     <div class="section-header"><h2>Perfect For</h2><div class="line"></div></div>
@@ -702,7 +774,7 @@
   <!-- ==================== COMPONENTS ==================== -->
   <div id="components" class="page">
     <div class="section-header"><h2>The Three-Component Suite</h2><div class="line"></div></div>
-    <p style="color:var(--muted); margin-bottom: 18px; font-size: 13px;">Three executables that work together as a complete, seamless system.</p>
+    <p class="lead">Three executables that work together as a complete, seamless system.</p>
     <div class="card-grid">
       <div class="card">
         <div class="card-icon">🧠</div>
@@ -712,7 +784,7 @@
       <div class="card red">
         <div class="card-icon">🎤</div>
         <h3>AI Client: The Voice Interface</h3>
-        <p>Push-to-talk or fully hands-free listening, audio playback, and a real-time connection to the server. Pushes your speaker name so the AI addresses you (or a guest) correctly. Lightweight, designed to run on your main streaming PC while the Server runs elsewhere.</p>
+        <p>Push-to-talk or hands-free room listening, audio playback, and a real-time connection to the server. Pushes your speaker name so the AI addresses you (or a guest) correctly. It is also the speaker for everything the AI says, chat replies included. Lightweight, designed to run on your main streaming PC while the Server runs elsewhere.</p>
       </div>
       <div class="card teal">
         <div class="card-icon">📡</div>
@@ -722,7 +794,7 @@
     </div>
     <div class="callout" style="margin-top: 18px;">
       <strong>💡 Recommended: Two-PC Setup</strong>
-      <p>Run the AI Server on a dedicated second PC to avoid GPU contention with your game and OBS. The Client communicates over your local network, so just point it at your second PC's IP address. Even a mid-range GPU (8GB+ VRAM) handles it well when not competing with a game encoder.</p>
+      <p>Run the AI Server on a dedicated second PC to avoid GPU contention with your game and OBS. The Client communicates over your local network, so just point it at your second PC's IP address. Even a mid-range GPU (8GB+ VRAM) handles it well when not competing with a game encoder. The Setup tab walks through it.</p>
     </div>
   </div>
 
@@ -731,10 +803,14 @@
     <div class="section-header"><h2>Voice &amp; Speech</h2><div class="line"></div></div>
     <ul class="feature-list" style="margin-bottom: 24px;">
       <li><span class="icon">🎙️</span><div><strong>Push-to-Talk</strong><span>Hold your configured key (default: Caps Lock) to speak directly to your AI. Whisper transcribes, the LLM processes, your chosen voice engine speaks back.</span></div></li>
-      <li><span class="icon">👂</span><div><strong>Continuous Listening (Live Mode)</strong><span>Go fully hands-free. Voice-activity detection lets the AI hear you without holding a key, with adjustable mic sensitivity and silence timeout, plus a per-utterance cooldown so it never over-triggers.</span></div></li>
-      <li><span class="icon">🗣️</span><div><strong>Dual TTS Engines</strong><span>Choose your voice: <strong style="display:inline">Piper</strong> for fast, CPU-only synthesis with no GPU required, or <strong style="display:inline">Chatterbox</strong> for higher-quality GPU speech. Ships as a switchable option so you match the voice to your hardware.</span></div></li>
+      <li><span class="icon">👂</span><div><strong>Room Listening <em class="new">New</em></strong><span>Go hands-free and the AI hears the room. Say its name and it answers. For everything else, a small helper model decides whether you were talking to it: it gives a full reply, drops a quick 1-4 word reaction, or asks "that for me?" when it isn't sure (answer yes and it replies to what you said). Talk to your friends and it stays out of it. Sensitivity, cooldowns and each behavior are tunable.</span></div></li>
+      <li><span class="icon">📝</span><div><strong>Whisper Custom Words <em class="new">New</em></strong><span>Give speech recognition your names, game terms and inside jokes so it hears them right instead of guessing.</span></div></li>
+      <li><span class="icon">⚡</span><div><strong>Fast Hearing <em class="new">New</em></strong><span>Whisper stays loaded for the whole session, clips are sized to their length, and every clip waits in one queue where push-to-talk always goes first. Both speed switches can be turned off on the Setup tab.</span></div></li>
+      <li><span class="icon">🗣️</span><div><strong>Dual TTS Engines</strong><span>Choose your voice: <strong style="display:inline">Piper</strong> for fast, CPU-only synthesis with no GPU required, or <strong style="display:inline">Chatterbox</strong> for higher-quality GPU speech. If Chatterbox isn't ready, Piper takes over automatically.</span></div></li>
       <li><span class="icon">🧬</span><div><strong>Voice Cloning (Chatterbox)</strong><span>Point Chatterbox at a short reference clip to clone a voice for your companion. Tune quality against speed (diffusion steps), and run on CUDA or CPU. Delivered as an optional add-on so the base app stays lean.</span></div></li>
-      <li><span class="icon">🎭</span><div><strong>Emotion-Aware Voice</strong><span>The AI reads the emotional tone of every reply (happy, sad, angry, excited, curious, bored, and more) and shapes delivery to match. A full per-emotion map drives pace and expressiveness for Piper and exaggeration and guidance for Chatterbox.</span></div></li>
+      <li><span class="icon">🎭</span><div><strong>Emotion-Aware Voice</strong><span>The AI reads the emotional tone of every reply (happy, sad, angry, excited, curious, bored, and more) and shapes delivery to match, with an Expressiveness slider. A full per-emotion map drives pace for Piper and exaggeration and guidance for Chatterbox.</span></div></li>
+      <li><span class="icon">🔤</span><div><strong>Pronunciation Fixes</strong><span>A spoken-word map so the voice says tricky names and words correctly, while memory keeps the original spelling.</span></div></li>
+      <li><span class="icon">🎬</span><div><strong>No Spoken Stage Directions <em class="new">New</em></strong><span>Roleplay models love writing *adjusts glasses*. Those actions are cleaned out before the reply is spoken or remembered, and one-word *emphasis* keeps its word. Turn it off if your character's actions are part of the act.</span></div></li>
       <li><span class="icon">🤝</span><div><strong>Guest-Star Speaker Name</strong><span>The client tells the server who is talking, so the AI addresses you correctly, even when your companion is running on another streamer's setup. The server's own name stays the fallback.</span></div></li>
       <li><span class="icon">🎲</span><div><strong>Random Wake-Ups</strong><span>Optional periodic prompts so the AI speaks up unprompted, great for filling silence during gameplay.</span></div></li>
       <li><span class="icon">🔊</span><div><strong>Audio-Aware Playback</strong><span>Playback-state signals ensure the AI never talks over itself. Clean, professional audio every time.</span></div></li>
@@ -742,16 +818,19 @@
 
     <div class="section-header"><h2>Autonomous Cognition</h2><div class="line"></div></div>
     <ul class="feature-list" style="margin-bottom: 24px;">
-      <li><span class="icon">📝</span><div><strong>Background Scratchpad Thinking</strong><span>The AI silently generates internal notes about the stream, recent conversations, and context at configurable intervals, giving it continuity and awareness.</span></div></li>
-      <li><span class="icon">🧩</span><div><strong>Meta-Cognition Synthesis</strong><span>A higher layer reviews those private thoughts and spots patterns across them, so the companion notices recurring themes instead of reacting one moment at a time.</span></div></li>
+      <li><span class="icon">📝</span><div><strong>Background Scratchpad Thinking</strong><span>The AI silently generates internal notes about the stream, recent conversations, and context at configurable intervals, giving it continuity and awareness. Notes name the streamer instead of guessing pronouns.</span></div></li>
       <li><span class="icon">🗣️</span><div><strong>Auto-Speaking</strong><span>The AI spontaneously speaks during idle moments based on its background thoughts. Frequency, idle time, and hourly caps are all tunable.</span></div></li>
       <li><span class="icon">↩️</span><div><strong>Follow-Up Awareness</strong><span>When the AI asks a genuine question and someone answers, it acknowledges the reply instead of forgetting it. Rhetorical questions are skipped automatically.</span></div></li>
+      <li><span class="icon">🌡️</span><div><strong>Persistent Mood</strong><span>A running mood (energy, warmth, amusement) that drifts with the stream and decays naturally, instead of resetting every message.</span></div></li>
+      <li><span class="icon">📏</span><div><strong>Reply Length Dial <em class="new">New</em></strong><span>Short, normal, long or extended, for quick quips or full explainers. Applies to conversation (mic, chat, redeems, and lines that say its name); quick reactions and background thoughts stay short.</span></div></li>
       <li><span class="icon">🔄</span><div><strong>Anti-Repetition Guards</strong><span>Trigram Jaccard similarity and sequence matching prevent repetition and loops. If it starts echoing, it backs off automatically.</span></div></li>
       <li><span class="icon">⏱️</span><div><strong>Adaptive Cooldowns</strong><span>Exponential backoff when repetitive output is detected. The thinker slows itself down and waits for new activity before generating more.</span></div></li>
+      <li><span class="icon">🏎️</span><div><strong>Optional Fast Helper Model</strong><span>Route quick background jobs (tool routing, judging, emotion, thinking) to a small fast model while replies stay on your character model. Off by default.</span></div></li>
+      <li><span class="icon">🧩</span><div><strong>Meta-Cognition Synthesis (optional)</strong><span>A higher layer can review the private thoughts and log patterns across them. Off by default, and never fed into replies, because small models tend to invent patterns.</span></div></li>
     </ul>
 
     <div class="section-header"><h2>Built-In Live Tools</h2><div class="line"></div></div>
-    <p style="color:var(--muted); font-size:13px; margin-bottom: 12px;">No API keys required. All free, all local-first.</p>
+    <p class="lead">No API keys required. All free, with one switch to turn every tool off for an offline stream.</p>
     <ul class="feature-list">
       <li><span class="icon">🌤️</span><div><strong>Weather</strong><span>Real-time weather via Open-Meteo, free, no key required.</span></div></li>
       <li><span class="icon">🕐</span><div><strong>Time</strong><span>Current local time for any location.</span></div></li>
@@ -763,7 +842,7 @@
   <!-- ==================== TWITCH ==================== -->
   <div id="twitch" class="page">
     <div class="section-header"><h2>Twitch Integration</h2><div class="line"></div></div>
-    <p style="color:var(--muted); font-size:13px; margin-bottom: 16px;">Every event below is individually toggleable. Each has a fully customizable message template with dynamic variables like <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:11px;">{username}</code>, <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:11px;">{bits}</code>, <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:11px;">{months}</code>, <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:11px;">{tier}</code>, and more.</p>
+    <p class="lead">Every event below is individually toggleable. Each has a fully customizable message template with dynamic variables like <code>{username}</code>, <code>{bits}</code>, <code>{months}</code>, <code>{tier}</code>, and more.</p>
     <div class="event-grid">
       <div class="event-row"><span class="event-icon">🎁</span><span class="event-name">Channel Point Redeems</span><span class="event-desc">Multiple custom redeem listeners, each matched by exact name with its own configurable payload.</span></div>
       <div class="event-row"><span class="event-icon">⭐</span><span class="event-name">Subscriptions &amp; Resubs</span><span class="event-desc">Reacts to new subs and resubs, including month count and tier recognition.</span></div>
@@ -774,6 +853,7 @@
       <div class="event-row"><span class="event-icon">💬</span><span class="event-name">Chat Commands</span><span class="event-desc">Set a command prefix (e.g. !bot) for direct AI chat, and define your own custom commands (!lurk, !hug, !gg), each sending its own payload.</span></div>
       <div class="event-row"><span class="event-icon">📺</span><span class="event-name">Host Mode</span><span class="event-desc">AI passively reads all chat messages for ambient awareness.</span></div>
       <div class="event-row"><span class="event-icon">👁️</span><span class="event-name">Observe Mode</span><span class="event-desc">AI monitors chat and selectively chimes in when a message crosses a configurable relevance threshold, with an ignored-users list and emoji filtering.</span></div>
+      <div class="event-row"><span class="event-icon">🎮</span><span class="event-name">Chat-Game Filter</span><span class="event-desc">Drops vote spam (!yes, !1, /raid) before it floods Observe mode. Your chat command and custom commands still get through.</span></div>
       <div class="event-row"><span class="event-icon">📣</span><span class="event-name">Ad Break Announcements</span><span class="event-desc">Custom messages auto-sent when ad breaks start and end.</span></div>
     </div>
 
@@ -786,12 +866,14 @@
   <!-- ==================== PERSONALITY ==================== -->
   <div id="personality" class="page">
     <div class="section-header"><h2>Personality System</h2><div class="line"></div></div>
-    <p style="color:var(--muted); font-size:13px; margin-bottom: 16px;">Build a full roster of distinct AI characters and switch between them on the fly.</p>
+    <p class="lead">Build a full roster of distinct AI characters and switch between them on the fly.</p>
     <ul class="feature-list" style="margin-bottom: 24px;">
+      <li><span class="icon">🪪</span><div><strong>Character Card</strong><span>Name, wake words and personality prompt in one place, with starter templates to begin from and a "Test a reply" button to hear it before you go live. Picking a card activates it.</span></div></li>
       <li><span class="icon">🎭</span><div><strong>Multiple Named Personalities</strong><span>Each with a unique system prompt, name, description, display color, and icon. Swap between them live.</span></div></li>
       <li><span class="icon">🧠</span><div><strong>Per-Personality Memory</strong><span>Each personality remembers its own conversations, completely separate from the others.</span></div></li>
-      <li><span class="icon">🌐</span><div><strong>Shared Global Memory</strong><span>Mark important memories as global so every personality can draw on them.</span></div></li>
+      <li><span class="icon">🌐</span><div><strong>Shared Memory</strong><span>Mark important memories as shared so every personality can draw on them.</span></div></li>
       <li><span class="icon">👥</span><div><strong>Per-Viewer Memory</strong><span>The AI keeps a profile for each viewer: facts, pronouns and gender (so it always addresses them correctly), and a running relationship arc of inside jokes and standout moments. All editable in-app from the Viewers tab.</span></div></li>
+      <li><span class="icon">🙋</span><div><strong>Gets People Right</strong><span>When someone it knows is named, it gets their real stored facts and pronouns and is told that is all it knows, so no invented history. It learns pronouns when you correct it on mic, and never guesses about someone it doesn't know.</span></div></li>
       <li><span class="icon">⚖️</span><div><strong>Importance-Scored Memory Storage</strong><span>A secondary LLM call scores each conversation 0-10 before deciding whether to store it. Casual small talk is filtered out; meaningful moments are kept. Threshold is configurable (default: 5.0/10).</span></div></li>
       <li><span class="icon">📓</span><div><strong>Session Recaps</strong><span>On shutdown, the AI writes a short first-person recap of the session into long-term memory, so it carries continuity from one stream to the next.</span></div></li>
       <li><span class="icon">📦</span><div><strong>Bounded, Efficient Memory</strong><span>Per-personality memory caps, per-prompt injection limits, and token-budget-aware context building keep the LLM prompt lean no matter how long you run it.</span></div></li>
@@ -799,12 +881,16 @@
     </ul>
 
     <div class="section-header"><h2>Configuration &amp; Customization</h2><div class="line"></div></div>
-    <p style="color:var(--muted); font-size:13px; margin-bottom: 12px;">Everything is tunable through a built-in GUI with dark mode support. Settings save automatically to AppData and survive restarts.</p>
+    <p class="lead">Everything is tunable through a built-in GUI with a dark theme. Settings save automatically to AppData and survive restarts.</p>
     <ul class="feature-list">
-      <li><span class="icon">🤖</span><div><strong>LLM Controls</strong><span>Ollama model selection, temperature, top-p, top-k, repeat penalty, context length, and optional step-by-step thinking mode.</span></div></li>
+      <li><span class="icon">✅</span><div><strong>Ready Check</strong><span>Test hearing, voice and brain with one click each before you go live.</span></div></li>
+      <li><span class="icon">🎚️</span><div><strong>Quick Setup</strong><span>Pick Quiet, Balanced or Chatty, or use two sliders (talks on its own / replies to chat). Every other setting lives under Advanced tuning.</span></div></li>
+      <li><span class="icon">🤖</span><div><strong>LLM Controls</strong><span>Ollama model selection, temperature, top-p, top-k, repeat penalty, context length, reply length and cap, and optional step-by-step thinking mode.</span></div></li>
       <li><span class="icon">🗣️</span><div><strong>Voice &amp; TTS Controls</strong><span>Switch between Piper and Chatterbox, set Chatterbox variant, device, reference clip, and quality steps, edit the full emotion-to-voice map, choose Whisper and voice model paths, and pick audio input/output devices.</span></div></li>
       <li><span class="icon">🧩</span><div><strong>Cognition Controls</strong><span>Background thinking interval, jitter, scratchpad size, auto-speaking frequency, idle threshold, hourly cap, and memory scoring threshold.</span></div></li>
       <li><span class="icon">🧪</span><div><strong>Editable Prompt Templates</strong><span>Tune the companion's internal prompts (scratchpad, synthesis, autonomous speech, session recap, and response rules) directly in the app, with one-click reset to defaults.</span></div></li>
+      <li><span class="icon">📊</span><div><strong>Context Usage Meter</strong><span>See where the prompt budget goes, piece by piece, so you can tune memory and context sizes with real numbers.</span></div></li>
+      <li><span class="icon">💾</span><div><strong>Save &amp; Load Config</strong><span>Keep whole setups as files and switch between them.</span></div></li>
     </ul>
   </div>
 
@@ -815,13 +901,13 @@
       <table class="req-table">
         <thead><tr><th>Requirement</th><th>Details</th></tr></thead>
         <tbody>
-          <tr><td>Ollama</td><td>Installed and running with at least one model pulled. Browse free models at ollama.com/library.</td></tr>
-          <tr><td>Whisper CLI</td><td>whisper-cli.exe with a model .bin file. Larger models (small, medium, large) offer better accuracy.</td></tr>
-          <tr><td>Piper TTS</td><td>piper.exe with a voice .onnx model. Hundreds of community voices at rhasspy.github.io/piper-samples.</td></tr>
-          <tr><td>Chatterbox TTS (Optional)</td><td>Optional GPU voice add-on for higher-quality, clonable speech. Runs as a separate local worker, so it is not required: Piper works out of the box. Best with a CUDA GPU.</td></tr>
-          <tr><td>Operating System</td><td>Windows (primary platform). Mac/Linux may require additional configuration and is not officially supported.</td></tr>
+          <tr><td>Ollama (you install)</td><td>Installed and running with at least one model pulled. This is the only thing you install yourself. Browse free models at ollama.com/library.</td></tr>
+          <tr><td>Whisper (included)</td><td>Ships with the app, plus a base speech model. Swap in a larger model (small, medium, large) any time for better accuracy.</td></tr>
+          <tr><td>Piper TTS (included)</td><td>Ships with the app, plus one voice. Hundreds more community voices at rhasspy.github.io/piper-samples.</td></tr>
+          <tr><td>Chatterbox TTS (Optional)</td><td>Optional GPU voice add-on for higher-quality, clonable speech. One-time installer, then it runs as a separate local worker. Not required: Piper works out of the box. Best with an NVIDIA (CUDA) GPU.</td></tr>
+          <tr><td>Operating System</td><td>Windows. Mac and Linux are not supported.</td></tr>
           <tr><td>GPU (Recommended)</td><td>8GB+ VRAM for the AI Server, more if you run Chatterbox. A dedicated second PC is strongly recommended for streamers.</td></tr>
-          <tr><td>Twitch Dev App</td><td>Free Client ID + Secret from dev.twitch.tv, required for the Twitch Listener only (about 5 min setup).</td></tr>
+          <tr><td>Twitch Dev App</td><td>Free Client ID + Secret from dev.twitch.tv, required for the Twitch Listener only (about 5 min setup, see the Setup tab).</td></tr>
         </tbody>
       </table>
     </div>
@@ -836,7 +922,7 @@
       <div class="card red">
         <div class="card-icon">🎤</div>
         <h3>AI Client</h3>
-        <p>Voice interface: push-to-talk and hands-free recording, audio playback, and server bridge.</p>
+        <p>Voice interface: push-to-talk and room listening, audio playback for every reply, and the server bridge.</p>
       </div>
       <div class="card teal">
         <div class="card-icon">📡</div>
@@ -847,13 +933,58 @@
 
     <div class="callout">
       <strong>📦 Included Out of the Box</strong>
-      <p>One base Whisper speech recognition model and one base Piper TTS voice model are included, so no additional downloads are needed to get started immediately.</p>
+      <p>Whisper and Piper ship with the app, each with a starter model, so you can talk to your AI as soon as Ollama has a model. The optional Chatterbox add-on and its installer are in the package too.</p>
     </div>
-    <p style="color:var(--muted); font-size:12px; text-align:center; margin-top: 10px;">The core external tools (Ollama, Whisper, Piper) are free and open source, and the optional Chatterbox add-on is too. Links and setup guidance are included with the package.</p>
+    <p style="color:var(--muted); font-size:12px; text-align:center; margin-top: 10px;">The core external tools (Ollama, Whisper, Piper) are free and open source, and the optional Chatterbox add-on is too.</p>
   </div>
 
-  <!-- ==================== NOTES ==================== -->
-  <div id="notes" class="page">
+  <!-- ==================== SETUP ==================== -->
+  <div id="setup" class="page">
+    <div class="section-header"><h2>Setup Guide</h2><div class="line"></div></div>
+    <p class="lead">From download to talking with your AI. Steps 1 to 5 get you running; 6 and 7 are optional.</p>
+    <ul class="feature-list" style="margin-bottom: 24px;">
+      <li><span class="num">1</span><div><strong>Install Ollama and pull a model</strong><span>Get Ollama from <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a>, then pull a model from <a href="https://ollama.com/library" target="_blank" rel="noopener">ollama.com/library</a>, for example <code>ollama pull &lt;model-name&gt;</code>. Pick a size your GPU can hold (see Help &gt; Notes on models).</span></div></li>
+      <li><span class="num">2</span><div><strong>Unzip the suite</strong><span>Extract the zip anywhere and keep the folders together: Whisper, Piper and the Chatterbox add-on sit beside the apps.</span></div></li>
+      <li><span class="num">3</span><div><strong>Start the AI Server and run the Ready check</strong><span>On the Setup tab:</span>
+        <ul>
+          <li><strong style="display:inline">Step 1, Hearing and voice:</strong> point it at the included <code>whisper-cli.exe</code> and model, and <code>piper.exe</code> and voice.</li>
+          <li><strong style="display:inline">Step 2, Brain:</strong> the Ollama address (default <code>http://localhost:11434</code>) and your model.</li>
+          <li>Press <strong style="display:inline">Test hearing</strong>, <strong style="display:inline">Test voice</strong> and <strong style="display:inline">Test brain</strong> in the Ready check, then <strong style="display:inline">▶ Start Server</strong>. It listens on port <code>5005</code>.</li>
+        </ul>
+      </div></li>
+      <li><span class="num">4</span><div><strong>Make your character</strong><span>On the Character tab, start from a template or write your own: name, wake words and personality. Use "Test a reply" to hear it. Then pick Quiet, Balanced or Chatty on the Behavior tab.</span></div></li>
+      <li><span class="num">5</span><div><strong>Start the AI Client</strong><span>Set the server address to <code>http://localhost:5005/process</code> (same PC) or <code>http://&lt;server-PC-IP&gt;:5005/process</code> (two PCs). Enter your speaker name so the AI knows who's talking, and choose your push-to-talk key or turn on room listening. Keep the client running while you stream: it plays every reply, chat included.</span></div></li>
+      <li><span class="num">6</span><div><strong>Connect Twitch (optional)</strong><span>Create an application at <a href="https://dev.twitch.tv/console" target="_blank" rel="noopener">dev.twitch.tv/console</a> with the OAuth Redirect URL <code>http://localhost:3000</code> (it must match exactly). Paste the Client ID and Secret into the Twitch Listener, log in, and point its server addresses at the AI Server (<code>http://localhost:5005</code> or the server PC's IP).</span></div></li>
+      <li><span class="num">7</span><div><strong>Add the OBS overlay (optional)</strong><span>Add a Browser Source pointing at <code>http://&lt;server-PC-IP&gt;:5005/overlay</code> (or <code>localhost</code> on one PC) for the "now responding" card. Pick a style preset in the server.</span></div></li>
+    </ul>
+
+    <div class="section-header"><h2>Two-PC Setup</h2><div class="line"></div></div>
+    <div class="callout">
+      <strong>🖥️ Server on PC 2, everything else on your streaming PC</strong>
+      <ul>
+        <li>Run Ollama and the AI Server on the second PC. The server listens on your network automatically.</li>
+        <li>On that PC, allow port <code>5005</code> through Windows Firewall (Windows usually asks the first time you start the server).</li>
+        <li>On your streaming PC, use the second PC's local IP (e.g. <code>192.168.1.50</code>) in the AI Client, the Twitch Listener and the OBS Browser Source.</li>
+        <li>Optional: set the same auth token in the server and the satellites so nothing else on your network can talk to it.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== HELP ==================== -->
+  <div id="help" class="page">
+    <div class="section-header"><h2>Troubleshooting</h2><div class="line"></div></div>
+    <ul class="feature-list" style="margin-bottom: 24px;">
+      <li><span class="icon">🔇</span><div><strong>The AI answers chat but I can't hear it</strong><span>The AI Client is the speaker for everything. Make sure it's running and connected; chat and autonomous replies wait for it.</span></div></li>
+      <li><span class="icon">🔌</span><div><strong>The client or listener can't reach the server</strong><span>Check the server is started, the IP and port <code>5005</code> are right, Windows Firewall allows the port on the server PC, and the auth token matches on both sides (or is blank on both).</span></div></li>
+      <li><span class="icon">🐢</span><div><strong>Replies are slow, or the log says MODEL THRASH</strong><span>Something else on the Ollama machine keeps pushing your model out of memory, so it reloads every reply. Run <code>ollama ps</code> there and stop the extra model, or pick a smaller model.</span></div></li>
+      <li><span class="icon">👂</span><div><strong>It mishears names or game terms</strong><span>Add them to "Whisper custom words" on the Setup tab, or switch to a larger Whisper model.</span></div></li>
+      <li><span class="icon">🔁</span><div><strong>Transcripts repeat or invent words</strong><span>Turn off "Fit Whisper to clip length" on the Setup tab.</span></div></li>
+      <li><span class="icon">🙉</span><div><strong>Room listening ignores me, or answers too much</strong><span>Say its name (or a wake word from the Character tab) for a guaranteed reply. Tune sensitivity and cooldowns in the client and Behavior &gt; Alive Ambient on the server.</span></div></li>
+      <li><span class="icon">🎙️</span><div><strong>Chatterbox isn't being used</strong><span>Run <code>install_chatterbox.bat</code> in the add-on folder once. Until the worker is ready, the server uses Piper so you never lose your voice; the log says why.</span></div></li>
+      <li><span class="icon">🎬</span><div><strong>It says its *actions* out loud, or I want them back</strong><span>Behavior &gt; Advanced tuning &gt; "Remove *actions* from replies". On removes them; off keeps them, and TTS reads them aloud.</span></div></li>
+      <li><span class="icon">🔑</span><div><strong>Twitch login fails</strong><span>The OAuth Redirect URL in your Twitch app must be exactly <code>http://localhost:3000</code>, matching the port in the Listener.</span></div></li>
+    </ul>
+
     <div class="section-header"><h2>Important Notes &amp; Disclaimers</h2><div class="line"></div></div>
 
     <div class="callout warning" style="margin-bottom: 12px;">
@@ -867,13 +998,13 @@
     </div>
 
     <div class="callout" style="margin-bottom: 12px;">
-      <strong>🔒 100% Local &amp; Private</strong>
-      <p>All AI inference, speech recognition, and TTS run entirely on your machine. No cloud APIs. No data sent anywhere except Twitch's own EventSub for channel events. Your conversations, memories, and personalities are stored locally in your AppData folder.</p>
+      <strong>🔒 Local &amp; Private</strong>
+      <p>All AI inference, speech recognition, and TTS run entirely on your machine. No cloud AI. The only internet traffic is Twitch's own EventSub for channel events and the optional live tools (weather, time, definitions, Wikipedia), which you can switch off. Your conversations, memories, and personalities are stored locally in your AppData folder.</p>
     </div>
 
     <div class="callout" style="margin-bottom: 12px;">
       <strong>📋 Additional Notes</strong>
-      <p>This software is provided as-is and is not affiliated with Twitch, Ollama, OpenAI (Whisper), the Piper TTS project, or the Chatterbox / Resemble AI project. No internet connection is required for core AI features, only for the Twitch Listener and live tools (weather, Wikipedia). Please review all requirements carefully before purchasing. Reach out with compatibility questions before buying.</p>
+      <p>This software is provided as-is and is not affiliated with Twitch, Ollama, OpenAI (Whisper), the Piper TTS project, or the Chatterbox / Resemble AI project. Please review all requirements carefully before purchasing. Reach out with compatibility questions before buying.</p>
     </div>
 
     <div class="footer-note">
@@ -924,15 +1055,10 @@
       }
     });
   </script>
-  
- <div style="text-align:center; padding: 24px 0 40px;">
-  <a href="https://kylealamode.itch.io/ai-stream-companion-suite" 
-     target="_blank" 
-     class="store-link">
-     ← Back to Itch Store Page
-  </a>
-</div>
 
+  <div style="text-align:center; padding: 24px 0 40px;">
+    <a href="https://kylealamode.itch.io/ai-stream-companion-suite" target="_blank" class="store-link">← Back to Itch Store Page</a>
+  </div>
 
   <!-- Always-visible floating buy button -->
   <a class="buy-fab" href="https://kylealamode.itch.io/ai-stream-companion-suite" target="_blank" rel="noopener"><span class="cart">🛒</span> Buy on itch</a>
